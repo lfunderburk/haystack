@@ -117,14 +117,9 @@ jobs:
           pip install --upgrade pip
           pip install .[dev,audio] langdetect transformers[torch,sentencepiece]==4.35.2 'sentence-transformers>=2.2.0' pypdf markdown-it-py mdit_plain tika 'azure-ai-formrecognizer>=3.2.0b2' cohere boilerpy3
 
-      - name: Get pip cache dir
-        id: pip-cache
-        shell: bash
-        run: echo "dir=$(pip cache dir)" >> "$GITHUB_OUTPUT"
-
       - uses: actions/cache@v3
         with:
-          path: ${{ steps.pip-cache.outputs.dir }}
+          path: ${{ env.pythonLocation }}
           key: pip-${{ runner.os }}-${{ github.run_id }}-${{ github.run_attempt }}
 
   unit-tests:
@@ -145,15 +140,10 @@ jobs:
         with:
           python-version: ${{ env.PYTHON_VERSION }}
 
-      - name: Get pip cache dir
-        id: pip-cache
-        shell: bash
-        run: echo "dir=$(pip cache dir)" >> "$GITHUB_OUTPUT"
-
-      - name: Restore pip cache
+      - name: Restore Python dependencies
         uses: actions/cache/restore@v3
         with:
-          path: ${{ steps.pip-cache.outputs.dir }}
+          path: ${{ env.pythonLocation }}
           key: pip-${{ runner.os }}-${{ github.run_id }}-${{ github.run_attempt }}
 
       - name: Run
@@ -211,14 +201,10 @@ jobs:
           sudo apt update
           sudo apt install ffmpeg  # for local Whisper tests
 
-      - name: Get pip cache dir
-        id: pip-cache
-        run: echo "dir=$(pip cache dir)" >> "$GITHUB_OUTPUT"
-
-      - name: Restore pip cache
+      - name: Restore Python dependencies
         uses: actions/cache/restore@v3
         with:
-          path: ${{ steps.pip-cache.outputs.dir }}
+          path: ${{ env.pythonLocation }}
           key: pip-${{ runner.os }}-${{ github.run_id }}-${{ github.run_attempt }}
 
       - name: Run
@@ -274,14 +260,10 @@ jobs:
           brew install docker
           colima start
 
-      - name: Get pip cache dir
-        id: pip-cache
-        run: echo "dir=$(pip cache dir)" >> "$GITHUB_OUTPUT"
-
-      - name: Restore pip cache
+      - name: Restore Python dependencies
         uses: actions/cache/restore@v3
         with:
-          path: ${{ steps.pip-cache.outputs.dir }}
+          path: ${{ env.pythonLocation }}
           key: pip-${{ runner.os }}-${{ github.run_id }}-${{ github.run_attempt }}
 
       - name: Run Tika
@@ -332,15 +314,10 @@ jobs:
         with:
           python-version: ${{ env.PYTHON_VERSION }}
 
-      - name: Get pip cache dir
-        id: pip-cache
-        shell: bash
-        run: Write-Output "dir=$(pip cache dir)" >> "$Env:GITHUB_OUTPUT"
-
-      - name: Restore pip cache
+      - name: Restore Python dependencies
         uses: actions/cache/restore@v3
         with:
-          path: ${{ steps.pip-cache.outputs.dir }}
+          path: ${{ env.pythonLocation }}
           key: pip-${{ runner.os }}-${{ github.run_id }}-${{ github.run_attempt }}
 
       - name: Run
